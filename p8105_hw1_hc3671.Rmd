@@ -5,26 +5,68 @@ date: "2025-09-15"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Loading package and dataset
+
+```{r}
+library(moderndive)
+data("early_january_weather")
 ```
 
-## R Markdown
+# Problem 1
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+**The description of data set:**
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+This data set records the weather condition in EWR from 1st to fifteenth of January in 2013. The weather condition includes variables like`r names(early_january_weather)[c(6,7,8,9,10,11,12,13,14,15)]` which refers to temperature, dew point, humidity, wind direction,wind speed, wind gust, precipitation, pressure, visibility and record times.\
+This data set has `r ncol(early_january_weather)` columns and `r nrow(early_january_weather)` row.    
+The mean temperature is `r mean(early_january_weather$temp)`.
 
-```{r cars}
-summary(cars)
+Make a plot of temperature and time_hour
+
+```{r}
+library(ggplot2)
+
+weather_plot <- ggplot(early_january_weather, aes(x = time_hour, y = temp, color = humid)) +
+  geom_point() +
+  labs(title = "Temperature vs Time (colored by humidity)", x = "Time", y = "Temperature (F)") +
+  theme_minimal()
+
+weather_plot
+ggsave("scatterplot_of_weather.png", plot = weather_plot)
 ```
 
-## Including Plots
+According to the plot, from the 1st to the 15th, the overall temperature shows an upward trend, with a regular daily cycle of lower temperatures in the morning and evening and higher temperatures around midday. At the same time, humidity is inversely related to temperature — in most cases, lower temperatures are associated with higher humidity.
 
-You can also embed plots, for example:
-  
-```{r pressure, echo=FALSE}
-plot(pressure)
+# Problem 3.
+
+First, we need to create a data frame includes different variables:
+
+```{r}
+library(tidyverse)
+set.seed(123)
+data_frame = tibble(
+  sample = rnorm(10),
+  is_positive = sample > 0,
+  char_vec = sample(words, 10),
+  fac_vec = factor(sample(
+    c("A", "B", "C"), size = 10, replace = TRUE
+  )),
+)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Then, we are going to try take the mean of each variable in data_frame:
+
+```{r}
+mean(data_frame$sample)
+mean(data_frame$is_positive)
+#mean(data_frame$char_vec) is NA
+#mean(data_frame$fac_vec) is NA
+```
+
+It shows that taking means works for the numeric and logistic(seen as 0 and 1), but not for the characters and factors.
+
+```{r eval = FALSE}
+as.numeric(data_frame$is_positive)
+as.numeric(data_frame$char_vec)
+as.numeric(data_frame$fac_vec)
+```
+
