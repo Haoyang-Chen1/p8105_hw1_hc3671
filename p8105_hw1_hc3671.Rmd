@@ -5,7 +5,7 @@ date: "2025-09-15"
 output: github_document
 ---
 
-Loading package and dataset
+Loading package and data set
 
 ```{r}
 library(moderndive)
@@ -17,7 +17,7 @@ data("early_january_weather")
 **The description of data set:**
 
 This data set records the weather condition in EWR from 1st to fifteenth of January in 2013. The weather condition includes variables like`r names(early_january_weather)[c(6,7,8,9,10,11,12,13,14,15)]` which refers to temperature, dew point, humidity, wind direction,wind speed, wind gust, precipitation, pressure, visibility and record times.\
-This data set has `r ncol(early_january_weather)` columns and `r nrow(early_january_weather)` row.    
+This data set has `r ncol(early_january_weather)` columns and `r nrow(early_january_weather)` row.\
 The mean temperature is `r mean(early_january_weather$temp)`.
 
 Make a plot of temperature and time_hour
@@ -36,7 +36,7 @@ ggsave("scatterplot_of_weather.png", plot = weather_plot)
 
 According to the plot, from the 1st to the 15th, the overall temperature shows an upward trend, with a regular daily cycle of lower temperatures in the morning and evening and higher temperatures around midday. At the same time, humidity is inversely related to temperature — in most cases, lower temperatures are associated with higher humidity.
 
-# Problem 3.
+# Problem 2
 
 First, we need to create a data frame includes different variables:
 
@@ -70,3 +70,12 @@ as.numeric(data_frame$char_vec)
 as.numeric(data_frame$fac_vec)
 ```
 
+After converting the latter three variable into numeric form:
+
+-   the logistic variables are converted to 0/1.
+
+-   the characters can not be converted to numbers(show N/A).
+
+-   the factor variables are converted to integers, like A, B, C to 1, 2, 3.
+
+According to the result above, the logistic variable can be converted automatically to numbers, which is 0/1 when taking the mean. However, the factor variable can be converted to numbers, but we can not take the mean before converting them. Further thinking, it is meaningless to take the mean of a factor mean because the factor is used for classification. Finally, the character vector can not be converted to numbers, which make sense.
